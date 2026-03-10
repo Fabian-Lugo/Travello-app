@@ -63,7 +63,9 @@ class _SliderScreenState extends State<SliderScreen> {
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,
                       );
-                    } 
+                    } else {
+                      Navigator.pushNamed(context, '/login');
+                    }
                   },
                   child: Container(
                     height: 60,

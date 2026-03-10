@@ -13,4 +13,10 @@ abstract final class AppColors {
 
   /// Color cuaternario - blanco puro
   static const Color quaternary = Color(0xFFFFFFFF);
+
+  /// Gris - #C4C4C4 al 20% de opacidad
+  static const Color gray = Color(0x33C4C4C4);
+
+  /// Negro al 50% de opacidad
+  static const Color black50 = Color(0x80000000);
 }
