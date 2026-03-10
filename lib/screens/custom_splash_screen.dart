@@ -23,7 +23,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
 
   void _goToHome() {
     if (!mounted) return;
-    Navigator.of(context).pushReplacementNamed('/home');
+    Navigator.of(context).pushReplacementNamed('/slide');
   }
 
   @override

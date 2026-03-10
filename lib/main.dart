@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:travell_app/screens/custom_splash_screen.dart';
 import 'package:travell_app/screens/home_page.dart';
+import 'package:travell_app/screens/slider_screen.dart';
 import 'package:travell_app/theme/app_colors.dart';
 
 void main() {
@@ -63,8 +64,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const CustomSplashScreen(),
-        '/home': (context) => const HomePage(),
+        '/': (context) => CustomSplashScreen(),
+        '/slide': (context) => SliderScreen(),
+        '/home': (context) => HomePage(),
       },
     );
   }
