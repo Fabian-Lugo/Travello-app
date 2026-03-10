@@ -1,11 +1,11 @@
 {
-    "name": "Travell",
-    "short_name": "Travell",
+    "name": "Travello",
+    "short_name": "Travello",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Travell - Tu compañero de viajes.",
+    "description": "Travello - Tu compañero de viajes.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
