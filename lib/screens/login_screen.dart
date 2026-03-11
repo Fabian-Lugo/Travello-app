@@ -43,7 +43,10 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           if (isValidUser) {
             messageOnScreen = null;
-            Navigator.pushNamed(context, '/home');
+            Navigator.pushNamed(
+              context, '/home',
+              arguments: _controllerText.text.trim(),
+            );
           } else {
             messageOnScreen = 'Credenciales incorrecta';
           }

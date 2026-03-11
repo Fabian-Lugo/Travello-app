@@ -71,9 +71,14 @@ class MyApp extends StatelessWidget {
         '/slide': (context) => SliderScreen(),
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
-        '/home': (context) => HomePage(),
       },
       onGenerateRoute: (settings) {
+        if (settings.name == '/home') {
+          final String? name = settings.arguments as String?; // Capturamos el nombre
+          return MaterialPageRoute(
+            builder: (context) => HomePage(name: name), // Se lo pasamos al constructor
+          );
+        }
         if (settings.name == '/verification') {
           final email = settings.arguments as String; // Recibimos el string
           return MaterialPageRoute(
