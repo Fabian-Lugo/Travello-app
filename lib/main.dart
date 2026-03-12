@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:travell_app/screens/custom_splash_screen.dart';
-import 'package:travell_app/screens/home_page.dart';
+import 'package:travell_app/screens/home_screen.dart';
 import 'package:travell_app/screens/login_screen.dart';
 import 'package:travell_app/screens/register_screen.dart';
 import 'package:travell_app/screens/slider_screen.dart';
@@ -74,9 +74,9 @@ class MyApp extends StatelessWidget {
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/home') {
-          final String? name = settings.arguments as String?; // Capturamos el nombre
+          final String? email = settings.arguments as String?; // Capturamos el nombre
           return MaterialPageRoute(
-            builder: (context) => HomePage(name: name), // Se lo pasamos al constructor
+            builder: (context) => HomeScreen(email: email), // Se lo pasamos al constructor
           );
         }
         if (settings.name == '/verification') {

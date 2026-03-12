@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:travell_app/theme/app_assets.dart';
 import 'package:travell_app/theme/app_colors.dart';
 import 'package:travell_app/utils/input_style.dart';
 import 'package:travell_app/widgets/button_style_default.dart';
@@ -149,7 +150,20 @@ class _RegisterPageState extends State<RegisterPage> {
                               focusedBorder: InputStyles.customBorder(),
                               errorBorder: InputStyles.customBorder(),
                               focusedErrorBorder: InputStyles.customBorder(),
-                              suffixIcon: Icon(Icons.person_2_outlined, color: AppColors.black50,)
+                              suffixIcon: Align(
+                                alignment: Alignment.centerRight,
+                                widthFactor: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: Image.asset(
+                                    AppAssets.user,
+                                    width: 22,
+                                    height: 22,
+                                    color: AppColors.black50,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
                             ),
                             validator: (value) => 
                             (value?.trim().isEmpty ?? true)
@@ -177,7 +191,20 @@ class _RegisterPageState extends State<RegisterPage> {
                               focusedBorder: InputStyles.customBorder(),
                               errorBorder: InputStyles.customBorder(),
                               focusedErrorBorder: InputStyles.customBorder(),
-                              suffixIcon: Icon(Icons.email_outlined, color: AppColors.black50,)
+                              suffixIcon: Align(
+                                alignment: Alignment.centerRight,
+                                widthFactor: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: Image.asset(
+                                    AppAssets.mail,
+                                    width: 22,
+                                    height: 22,
+                                    color: AppColors.black50,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
                             ),
                             validator: (value) => 
                             (value?.trim().isEmpty ?? true)
@@ -205,7 +232,20 @@ class _RegisterPageState extends State<RegisterPage> {
                               focusedBorder: InputStyles.customBorder(),
                               errorBorder: InputStyles.customBorder(),
                               focusedErrorBorder: InputStyles.customBorder(),
-                              suffixIcon: Icon(Icons.phone, color: AppColors.black50,)
+                              suffixIcon: Align(
+                                alignment: Alignment.centerRight,
+                                widthFactor: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: Image.asset(
+                                    AppAssets.mobile,
+                                    width: 22,
+                                    height: 22,
+                                    color: AppColors.black50,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
                             ),
                             validator: (value) => 
                             (value?.trim().isEmpty ?? true)
@@ -230,12 +270,31 @@ class _RegisterPageState extends State<RegisterPage> {
                               focusedBorder: InputStyles.customBorder(),
                               errorBorder: InputStyles.customBorder(),
                               focusedErrorBorder: InputStyles.customBorder(),
-                              suffixIcon: _controllerPassword.text.isNotEmpty
-                              ? IconButton(
-                                onPressed: _seePassword, 
-                                icon: Icon(_obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.black50,)
-                              )
-                              : Icon(Icons.lock_outline_rounded, color: AppColors.black50,)
+                              suffixIcon: Align(
+                                alignment: Alignment.centerRight,
+                                widthFactor: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: _controllerPassword.text.isNotEmpty
+                                  ? GestureDetector(
+                                    onTap: _seePassword,
+                                    child: Image.asset(
+                                      _obscureText ? AppAssets.eye2 : AppAssets.eye1,
+                                      width: 22,
+                                      height: 22,
+                                      color: AppColors.black50,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  )
+                                  : Image.asset(
+                                      AppAssets.secure,
+                                      width: 22,
+                                      height: 22,
+                                      color: AppColors.black50,
+                                      fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
                             ),
                             validator: (value) => 
                             (value?.trim().isEmpty ?? true)
@@ -278,8 +337,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             const SizedBox(width: 3),
                             GestureDetector(
                               onTap: () => debugPrint('Usuario: Terminos'),
-                              child: Text('Terminos',
-                                style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w400, color: AppColors.primary),
+                              behavior: HitTestBehavior.opaque,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Text('Terminos',
+                                  style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w400, color: AppColors.primary),
+                                ),
                               ),
                             ),
                             const SizedBox(width: 3),
@@ -290,8 +353,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             const SizedBox(width: 3),
                             GestureDetector(
                               onTap: () => debugPrint('Usuario: Condiciones'),
-                              child: Text('Condiciones',
-                                style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w400, color: AppColors.primary),
+                              behavior: HitTestBehavior.opaque,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Text('Condiciones',
+                                  style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w400, color: AppColors.primary),
+                                ),
                               ),
                             ),
                           ],
@@ -312,8 +379,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             const SizedBox(width: 5),
                             GestureDetector(
                               onTap: () => Navigator.pushNamed(context, '/login'),
-                              child: Text('Inicia sesión',
-                                style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.primary)
+                              behavior: HitTestBehavior.opaque,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                child: Text('Inicia sesión',
+                                  style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.primary)
+                                ),
                               ),
                             ),
                           ],

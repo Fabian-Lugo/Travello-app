@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travell_app/models/user_model.dart';
+import 'package:travell_app/theme/app_assets.dart';
 import 'package:travell_app/theme/app_colors.dart';
 import 'package:travell_app/utils/input_style.dart';
 import 'package:travell_app/widgets/button_style_default.dart';
@@ -21,11 +22,10 @@ class _LoginPageState extends State<LoginPage> {
   bool _rememberMe = false;
 
   final List<UserModel> users = [
-    UserModel(user: 'user1', password: 'test123'),
-    UserModel(user: 'user2', password: 'test123'),
-    UserModel(user: 'User3', password: 'test123'),
+    UserModel(user: 'user1@test.com', password: 'test123'),
+    UserModel(user: 'user2@test.com', password: 'test123'),
+    UserModel(user: 'User3@test.com', password: 'test123'),
   ];
-  
 
   void _seePassword() {
     setState(() {
@@ -52,6 +52,12 @@ class _LoginPageState extends State<LoginPage> {
           }
         });
     }
+  }
+
+  void registerForm() {
+    _controllerText.clear();
+    _controllerPassword.clear();
+    Navigator.pushNamed(context, '/register');
   }
 
   @override
@@ -96,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 30),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 35),
                 child: Column(
@@ -124,7 +130,20 @@ class _LoginPageState extends State<LoginPage> {
                               focusedBorder: InputStyles.customBorder(),
                               errorBorder: InputStyles.customBorder(),
                               focusedErrorBorder: InputStyles.customBorder(),
-                              suffixIcon: Icon(Icons.email_outlined, color: AppColors.black50,)
+                              suffixIcon: Align(
+                                alignment: Alignment.centerRight,
+                                widthFactor: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: Image.asset(
+                                    AppAssets.mail,
+                                    width: 22,
+                                    height: 22,
+                                    color: AppColors.black50,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
                             ),
                             validator: (value) => 
                             (value?.trim().isEmpty ?? true)
@@ -148,12 +167,31 @@ class _LoginPageState extends State<LoginPage> {
                               focusedBorder: InputStyles.customBorder(),
                               errorBorder: InputStyles.customBorder(),
                               focusedErrorBorder: InputStyles.customBorder(),
-                              suffixIcon: _controllerPassword.text.isNotEmpty
-                              ? IconButton(
-                                onPressed: _seePassword, 
-                                icon: Icon(_obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.black50,)
-                              )
-                              : Icon(Icons.lock_outline_rounded, color: AppColors.black50,)
+                              suffixIcon: Align(
+                                alignment: Alignment.centerRight,
+                                widthFactor: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: _controllerPassword.text.isNotEmpty
+                                  ? GestureDetector(
+                                    onTap: _seePassword,
+                                    child: Image.asset(
+                                      _obscureText ? AppAssets.eye2 : AppAssets.eye1,
+                                      width: 22,
+                                      height: 22,
+                                      color: AppColors.black50,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  )
+                                  : Image.asset(
+                                      AppAssets.secure,
+                                      width: 22,
+                                      height: 22,
+                                      color: AppColors.black50,
+                                      fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
                             ),
                             validator: (value) => 
                             (value?.trim().isEmpty ?? true)
@@ -168,7 +206,7 @@ class _LoginPageState extends State<LoginPage> {
                       Text(messageOnScreen!,
                         style: GoogleFonts.poppins(color: AppColors.primary, fontSize: 15, fontWeight: FontWeight.w600),
                       ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -197,13 +235,17 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         GestureDetector(
                           onTap: () => debugPrint('Usuario: Cambiar Contraseña'),
-                          child: Text('Cambiar contraseña',
-                            style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w400, color: AppColors.primary),
+                          behavior: HitTestBehavior.opaque,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            child: Text('Cambiar contraseña',
+                              style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w400, color: AppColors.primary),
+                            ),
                           ),
                         )
                       ],
                     ),
-                    const SizedBox(height: 115),
+                    const SizedBox(height: 140),
                     ButtonStyleDefalt(text: 'Iniciar sesión', onTap: loginValidate),
                     const SizedBox(height: 20),
                     Row(
@@ -216,9 +258,13 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(width: 5),
                             GestureDetector(
-                              onTap: () => Navigator.pushNamed(context, '/register'),
-                              child: Text('Registrate ahora',
-                                style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.primary)
+                              onTap: registerForm,
+                              behavior: HitTestBehavior.opaque,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                child: Text('Registrate ahora',
+                                  style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.primary)
+                                ),
                               ),
                             ),
                           ],
