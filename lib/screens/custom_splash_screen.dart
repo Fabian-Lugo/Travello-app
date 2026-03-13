@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,12 +19,21 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FlutterNativeSplash.remove();
     });
-    Future.delayed(const Duration(seconds: 2), _goToHome);
+    Future.delayed(const Duration(seconds: 2), _goToNext);
   }
 
-  void _goToHome() {
+  void _goToNext() {
     if (!mounted) return;
-    Navigator.of(context).pushReplacementNamed('/slide');
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // Sesión persistida: ir directo al home (recordarme mantiene la sesión)
+      Navigator.of(context).pushReplacementNamed(
+        '/home',
+        arguments: user.email ?? '',
+      );
+    } else {
+      Navigator.of(context).pushReplacementNamed('/slide');
+    }
   }
 
   @override

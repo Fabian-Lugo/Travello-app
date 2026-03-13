@@ -10,6 +10,8 @@ class AccountInfoStyle extends StatefulWidget {
   final String? image3;
   final bool? isDelicade;
   final bool secondIcon;
+  /// Si es true, el texto (ej. contraseña) se muestra visible al inicio.
+  final bool initialObscureText;
 
   const AccountInfoStyle({
     super.key,
@@ -20,6 +22,7 @@ class AccountInfoStyle extends StatefulWidget {
     this.image3,
     this.isDelicade = false,
     this.secondIcon = false,
+    this.initialObscureText = true,
   });
 
   @override
@@ -27,7 +30,13 @@ class AccountInfoStyle extends StatefulWidget {
 }
 
 class _AccountInfoStyleState extends State<AccountInfoStyle> {
-  bool _obscureText = true;
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = widget.initialObscureText;
+  }
+
+  late bool _obscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -77,12 +86,16 @@ class _AccountInfoStyleState extends State<AccountInfoStyle> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () => setState(() => _obscureText = !_obscureText),
-                              child: Image.asset(
-                                _obscureText ? widget.image2! : (widget.image3 ?? widget.image2!),
-                                width: 25,
-                                color: AppColors.black50,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () => setState(() => _obscureText = !_obscureText),
+                                child: Image.asset(
+                                  _obscureText ? widget.image2! : (widget.image3 ?? widget.image2!),
+                                  width: 25,
+                                  color: AppColors.black50,
+                                ),
                               ),
                             ),
                           ],

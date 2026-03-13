@@ -1,63 +1,58 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travell_app/models/user_model.dart';
+import 'package:travell_app/services/auth_service.dart';
 import 'package:travell_app/theme/app_assets.dart';
 import 'package:travell_app/theme/app_colors.dart';
-import 'package:travell_app/utils/input_style.dart';
 import 'package:travell_app/widgets/button_style_default.dart';
+import 'package:travell_app/widgets/redirect_text_button.dart';
+import 'package:travell_app/widgets/travel_input_field.dart';
+import 'package:travell_app/widgets/travel_password_field.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _controllerText = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _controllerTextEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
   final _key = GlobalKey<FormState>();
   String? messageOnScreen;
-  bool _obscureText = true;
   bool _rememberMe = false;
-
-  final List<UserModel> users = [
-    UserModel(user: 'user1@test.com', password: 'test123'),
-    UserModel(user: 'user2@test.com', password: 'test123'),
-    UserModel(user: 'User3@test.com', password: 'test123'),
-  ];
-
-  void _seePassword() {
-    setState(() {
-      _obscureText = !_obscureText;
-    });
-  }
-
   
-  void loginValidate() {
+  void loginValidate() async{
     if (_key.currentState!.validate()) {
-        bool? isValidUser = users.any((u) =>
-          u.user == _controllerText.text.trim() &&
-          u.password == _controllerPassword.text.trim());
+      try{
+        UserCredential user = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _controllerTextEmail.text.trim(),
+          password: _controllerPassword.text.trim(),
+        );
 
-        setState(() {
-          if (isValidUser) {
-            messageOnScreen = null;
-            Navigator.pushNamed(
-              context, '/home',
-              arguments: _controllerText.text.trim(),
-            );
-          } else {
-            messageOnScreen = 'Credenciales incorrecta';
-          }
-        });
+        if (mounted) {
+          final password = _controllerPassword.text.trim();
+          AuthService.lastLoginPassword = password;
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/home',
+            (route) => false,
+            arguments: {
+              'email': _controllerTextEmail.text.trim(),
+              'password': password,
+            },
+          );
+        }
+        debugPrint('$user');
+      } on FirebaseAuthException catch (e) {
+        if (mounted) {
+          setState(() {
+            messageOnScreen = e.message;
+          });
+        }
+      }
     }
-  }
-
-  void registerForm() {
-    _controllerText.clear();
-    _controllerPassword.clear();
-    Navigator.pushNamed(context, '/register');
   }
 
   @override
@@ -78,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Image.asset(
                         'assets/image_screen.png',
                         height: size.height * 0.3,
-                        fit: .contain,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
@@ -111,92 +106,27 @@ class _LoginPageState extends State<LoginPage> {
                       key: _key,
                       child: Column(
                         children: [
-                          TextFormField(
-                            controller: _controllerText,
-                            keyboardType: TextInputType.emailAddress,
-                            onChanged: (value) {
+                          TravelInputField(
+                            text: 'Correo', 
+                            image: AppAssets.mail, 
+                            controller: _controllerTextEmail, 
+                            type: TextInputType.emailAddress,
+                            onChanged: () {
                               if (messageOnScreen != null) {
                                 setState(() {
                                   messageOnScreen = null;
                                 });
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Ingresa tu correo',
-                              labelStyle: GoogleFonts.poppins(color: AppColors.black50),
-                              filled: true,
-                              fillColor: AppColors.gray,
-                              enabledBorder: InputStyles.customBorder(),
-                              focusedBorder: InputStyles.customBorder(),
-                              errorBorder: InputStyles.customBorder(),
-                              focusedErrorBorder: InputStyles.customBorder(),
-                              suffixIcon: Align(
-                                alignment: Alignment.centerRight,
-                                widthFactor: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 12),
-                                  child: Image.asset(
-                                    AppAssets.mail,
-                                    width: 22,
-                                    height: 22,
-                                    color: AppColors.black50,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            validator: (value) => 
-                            (value?.trim().isEmpty ?? true)
-                            ? 'Ingresa tu correo'
-                            : null,
+                              } 
+                            }
                           ),
                           const SizedBox(height: 30),
-                          TextFormField(
-                            controller: _controllerPassword,
-                            keyboardType: TextInputType.text,
-                            onChanged: (value) => setState(() {
-                              messageOnScreen = null;
-                            }),
-                            obscureText: _obscureText,
-                            decoration: InputDecoration(
-                              labelText: 'Contraseña',
-                              labelStyle: GoogleFonts.poppins(color: AppColors.black50),
-                              filled: true,
-                              fillColor: AppColors.gray,
-                              enabledBorder: InputStyles.customBorder(),
-                              focusedBorder: InputStyles.customBorder(),
-                              errorBorder: InputStyles.customBorder(),
-                              focusedErrorBorder: InputStyles.customBorder(),
-                              suffixIcon: Align(
-                                alignment: Alignment.centerRight,
-                                widthFactor: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 12),
-                                  child: _controllerPassword.text.isNotEmpty
-                                  ? GestureDetector(
-                                    onTap: _seePassword,
-                                    child: Image.asset(
-                                      _obscureText ? AppAssets.eye2 : AppAssets.eye1,
-                                      width: 22,
-                                      height: 22,
-                                      color: AppColors.black50,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  )
-                                  : Image.asset(
-                                      AppAssets.secure,
-                                      width: 22,
-                                      height: 22,
-                                      color: AppColors.black50,
-                                      fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            validator: (value) => 
-                            (value?.trim().isEmpty ?? true)
-                            ? 'Ingresa tu contraseña'
-                            : null,
+                          TravelPasswordField(
+                            controller: _controllerPassword, 
+                            onChanged: () {
+                              if (messageOnScreen != null) {
+                                setState(() => messageOnScreen = null);
+                              }
+                            },
                           ),
                         ],
                       ),
@@ -245,36 +175,17 @@ class _LoginPageState extends State<LoginPage> {
                         )
                       ],
                     ),
-                    const SizedBox(height: 140),
+                    SizedBox(height: size.height * 0.12),
                     ButtonStyleDefalt(text: 'Iniciar sesión', onTap: loginValidate),
                     const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Text('Nuevo miembro?',
-                              style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.tertiary)
-                            ),
-                            const SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: registerForm,
-                              behavior: HitTestBehavior.opaque,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                child: Text('Registrate ahora',
-                                  style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.primary)
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    RedirectTextButton(
+                      text: 'Nuevo miembro?', 
+                      textLink: 'Registrate ahora'
                     ),
+                    const SizedBox(height: 5),
                   ],
                 ),
               ),
-              const SizedBox(height: 30),
             ],
           ),
         ),

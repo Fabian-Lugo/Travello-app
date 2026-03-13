@@ -3,19 +3,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:travell_app/theme/app_colors.dart';
 import 'package:travell_app/widgets/button_style_default.dart';
 
-class VerificationRegister extends StatefulWidget{
+class VerificationRegisterScreen extends StatefulWidget{
   final String email;
 
-  const VerificationRegister({
+  const VerificationRegisterScreen({
     super.key,
     required this.email,
   });
 
   @override
-  State<VerificationRegister> createState() => _VerificationRegisterState();
+  State<VerificationRegisterScreen> createState() => _VerificationRegisterScreenState();
 }
 
-class _VerificationRegisterState extends State<VerificationRegister> {
+class _VerificationRegisterScreenState extends State<VerificationRegisterScreen> {
 
   void changePage() {
     Navigator.pushNamed(context, '/login');
@@ -89,7 +89,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
                   ),
                   const SizedBox(height: 10),
                   ButtonStyleDefalt(text: 'Iniciar sesion', onTap: changePage),
-                  const SizedBox(height: 430),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.5),
                   Row(
                     children: [
                       GestureDetector(

@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:travell_app/firebase_options.dart';
 import 'package:travell_app/screens/custom_splash_screen.dart';
 import 'package:travell_app/screens/home_screen.dart';
 import 'package:travell_app/screens/login_screen.dart';
@@ -9,9 +11,14 @@ import 'package:travell_app/screens/slider_screen.dart';
 import 'package:travell_app/screens/verification_register.dart';
 import 'package:travell_app/theme/app_colors.dart';
 
-void main() {
+void main() async{
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -70,21 +77,31 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => CustomSplashScreen(),
         '/slide': (context) => SliderScreen(),
-        '/login': (context) => LoginPage(),
-        '/register': (context) => RegisterPage(),
+        '/login': (context) => LoginScreen(),
+        '/register': (context) => RegisterScren(),
         '/settings': (context) => SettingsScreen(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/home') {
-          final String? email = settings.arguments as String?; // Capturamos el nombre
+          String? email;
+          String? password;
+          final args = settings.arguments;
+          if (args is Map) {
+            email = (args['email'] ?? '').toString();
+            password = (args['password'] ?? '').toString();
+            if (email.isEmpty) email = null;
+            if (password.isEmpty) password = null;
+          } else if (args is String) {
+            email = args;
+          }
           return MaterialPageRoute(
-            builder: (context) => HomeScreen(email: email), // Se lo pasamos al constructor
+            builder: (context) => HomeScreen(email: email, password: password),
           );
         }
         if (settings.name == '/verification') {
           final email = settings.arguments as String; // Recibimos el string
           return MaterialPageRoute(
-            builder: (context) => VerificationRegister(email: email),
+            builder: (context) => VerificationRegisterScreen(email: email),
           );
         }
         return null;
